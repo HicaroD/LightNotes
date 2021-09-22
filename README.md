@@ -6,5 +6,5 @@ A note-taking system for project management based on little insights written in 
 ## Usage 
 
 ## License 
-[MIT]("./LICENSE")
+[MIT](./LICENSE)
 
