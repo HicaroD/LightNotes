@@ -3,12 +3,12 @@ from project_manager import ProjectManager
 
 """
 TODO:
-    [] BUG: Program is not throwing an exception when I try to create a new project, but it already exist
+    [] BUG: Program is not throwing an exception when I try to create a new project, but it already exists
 
     [] FEATURE: Implement a way to make the user insert a name for the project
-                and create a new one (without pass a parameter for the name)
+                and create a new one (without passing a parameter for the name)
 
-    [] FEATURE: Find a way to read text file in Tkinter
+    [] FEATURE: Find a way to read text file using Tkinter
 """
 
 
