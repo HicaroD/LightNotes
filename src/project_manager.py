@@ -1,22 +1,25 @@
+import tkinter
+from tkinter import messagebox, simpledialog
 import os
 
-project_notes_folder_path = "./project_notes/"
 
 class ProjectManager:
-    def create_project(self, project_name : str):
-        file_name_for_project = f"{project_name}.txt"
+    def __init__(self):
+        self.project_notes_folder_path = "project_notes/"
 
-        if(file_name_for_project not in os.listdir(project_notes_folder_path)):
-            try:
-                with open(os.path.join(project_notes_folder_path, file_name_for_project), mode="x", encoding="utf-8") as f:
-                    print("Creating a new project: " + (project_notes_folder_path + file_name_for_project))
+    def ask_for_project_name(self):
+        return tkinter.simpledialog.askstring("What is the name of project?", "Insert the name of the project")
 
-            except FileExistsError as e:
-                print(e)
+    def create_project(self):
+        try:
+            project_name = self.ask_for_project_name()
 
+            if project_name is not None:
+                file_name_for_project = f"{project_name}.txt".replace(" ", "_")
+                path_for_project_notes = os.path.join(self.project_notes_folder_path, file_name_for_project)
 
+                with open(path_for_project_notes, 'x') as f:
+                    f.write(project_name.title())
 
-
-
-
-
+        except FileExistsError:
+            messagebox.showwarning("WARNING", "Project already exists")
