@@ -3,12 +3,12 @@ from project_manager import ProjectManager
 
 """
 TODO:
-    [] BUG: Program is not throwing an exception when I try to create a new project, but it already exists
+    [X] FEATURE: Add a way to make the user insert a name for the project and
+                 create a new one (without passing a parameter for the name)
 
-    [] FEATURE: Implement a way to make the user insert a name for the project
-                and create a new one (without passing a parameter for the name)
+    [] FEATURE: Add a way to read text file using Tkinter
 
-    [] FEATURE: Find a way to read text file using Tkinter
+    [] FEATURE: Add a better way to handle / manage the button creation (or leave it like that)
 """
 
 
@@ -32,9 +32,8 @@ class Application(tkinter.Frame):
         self.add_project_button()
 
     def add_project_button(self):
-        add_proj_bttn = Button.create_button(self.master, "Add project", self.project_manager.create_project("teste"))
+        add_proj_bttn = Button.create_button(self.master, "Add project", self.project_manager.create_project)
         add_proj_bttn.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
-
 
 
 def main():
