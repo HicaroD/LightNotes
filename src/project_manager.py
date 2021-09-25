@@ -10,6 +10,11 @@ class ProjectManager:
     def ask_for_project_name(self):
         return tkinter.simpledialog.askstring("What is the name of project?", "Insert the name of the project")
 
+    def create_file(self, project_name, path_for_project_notes):
+        """Creates txt file to store the notes"""
+        with open(path_for_project_notes, 'x') as f:
+            f.write(project_name.title())
+
     def create_project(self):
         try:
             project_name = self.ask_for_project_name()
@@ -18,8 +23,11 @@ class ProjectManager:
                 file_name_for_project = f"{project_name}.txt".replace(" ", "_")
                 path_for_project_notes = os.path.join(self.project_notes_folder_path, file_name_for_project)
 
-                with open(path_for_project_notes, 'x') as f:
-                    f.write(project_name.title())
+                self.create_file(project_name, path_for_project_notes)
 
         except FileExistsError:
-            messagebox.showwarning("WARNING", "Project already exists")
+            want_to_overwrite = messagebox.askyesno("WARNING", "Project already exists! \nDo you want overwrite it?")
+
+            if(want_to_overwrite):
+                os.remove(path_for_project_notes)
+                self.create_file(project_name, path_for_project_notes)
