@@ -2,10 +2,11 @@ import tkinter
 from tkinter import messagebox, simpledialog
 import os
 
+CURRENT_SCRIPT_FILE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class ProjectManager:
     def __init__(self):
-        self.project_notes_folder_path = "project_notes/"
+        self.project_notes_folder_path = os.path.join(CURRENT_SCRIPT_FILE_PATH, "project_notes/")
 
     def ask_for_project_name(self):
         return tkinter.simpledialog.askstring("What is the name of project?", "Insert the name of the project")
