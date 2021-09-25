@@ -12,28 +12,31 @@ TODO:
 """
 
 
-class Button():
-    @staticmethod
-    def create_button(master : tkinter.Tk, text : str, command):
-        return tkinter.Button(master, text = text, command = command)
+class ButtonManager():
+    def __init__(self, master : tkinter.Tk):
+        self.master = master
+        self.project_manager = ProjectManager()
+
+    def create_button(self, text : str, command):
+        return tkinter.Button(self.master, text = text, command = command)
+
+    def add_project_button(self):
+        add_proj_bttn = self.create_button("Add project", self.project_manager.create_project)
+        add_proj_bttn.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
 
 
 class Application(tkinter.Frame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
-        self.project_manager = ProjectManager()
+        self.buttons = ButtonManager(self.master)
         self.configure_gui()
 
     def configure_gui(self):
         self.master.title("LightNotes")
         self.master.geometry("720x480")
         self.master.resizable(False, False)
-        self.add_project_button()
-
-    def add_project_button(self):
-        add_proj_bttn = Button.create_button(self.master, "Add project", self.project_manager.create_project)
-        add_proj_bttn.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
+        self.buttons.add_project_button()
 
 
 def main():
