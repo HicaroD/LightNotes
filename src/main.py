@@ -6,7 +6,7 @@ TODO:
     [X] FEATURE: Add a way to make the user insert a name for the project and
                  create a new one (without passing a parameter for the name)
 
-    [] FEATURE: Add a button for inserting a input
+    [X] FEATURE: Add a button for inserting a input
 
     [] FEATURE: Insert a current datetime for each note input in the project
 
