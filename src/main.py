@@ -28,16 +28,25 @@ class ButtonManager():
         self.window = window
         self.project_manager = ProjectManager()
 
-    def create_button(self, text : str, command):
-        return tkinter.Button(self.window, text = text, command = command, width=12, height=5)
+    def create_button(self, text : str, command, style = "primary.TButton"):
+        return tkinter.ttk.Button(self.window, text = text, style = style, command = command)
+
+    def draw_buttons(self):
+        self.add_project_button()
+        self.add_input_button()
+        self.add_info_button()
 
     def add_project_button(self):
         add_proj_bttn = self.create_button("Add project", self.project_manager.create_project)
-        add_proj_bttn.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
+        add_proj_bttn.pack(side = tkinter.constants.LEFT, anchor = tkinter.constants.NW)
 
     def add_input_button(self):
         add_input_btton = self.create_button("Add a new input", self.project_manager.add_input_note)
-        add_input_btton.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
+        add_input_btton.pack(side = tkinter.constants.LEFT, anchor = tkinter.constants.NW)
+
+    def add_info_button(self):
+        add_info_bttn = self.create_button("Info", style = "info.TButton", command = self.project_manager.info)
+        add_info_bttn.pack(side = tkinter.constants.RIGHT, anchor = tkinter.constants.SE)
 
 
 class Application(tkinter.Frame):
@@ -53,8 +62,7 @@ class Application(tkinter.Frame):
         self.master.title("LightNotes")
         self.master.geometry("720x480")
         self.master.resizable(False, False)
-        self.buttons.add_project_button()
-        self.buttons.add_input_button()
+        self.buttons.draw_buttons()
 
 
 def main():
