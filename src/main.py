@@ -7,6 +7,8 @@ TODO:
                  create a new one (without passing a parameter for the name)
 
     [X] FEATURE: Add a button for inserting a input
+    
+    [] FIXING: Increase the size of "ask_for_project_name" widget
 
     [] FEATURE: Insert a current datetime for each note input in the project
 
@@ -30,7 +32,7 @@ class ButtonManager():
 
     def add_input_button(self):
         # TODO: Create add_input method and insert in the button bellow
-        add_input_btton = self.create_button("Add a new input")
+        add_input_btton = self.create_button("Add a new input", self.project_manager.add_input_note)
         add_input_btton.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
 
 
@@ -39,7 +41,7 @@ class Application(tkinter.Frame):
         super().__init__(master)
         self.master = master
         self.buttons = ButtonManager(self.master)
-        self.widget = Widget(self.master)
+        self.widget = Widget()
         self.configure_gui()
 
     def configure_gui(self):
@@ -48,12 +50,10 @@ class Application(tkinter.Frame):
         self.master.resizable(False, False)
         self.buttons.add_project_button()
         self.buttons.add_input_button()
-        self.widget.create_project_list_box()
 
 
 def main():
     root = tkinter.Tk()
     app = Application(root)
     root.mainloop()
-
 main()
