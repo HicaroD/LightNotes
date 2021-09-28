@@ -7,10 +7,10 @@ TODO:
                  create a new one (without passing a parameter for the name)
 
     [X] FEATURE: Add a button for inserting a input
-    
+
     [] FIXING: Increase the size of "ask_for_project_name" widget
 
-    [] FEATURE: Insert a current datetime for each note input in the project
+    [X] FEATURE: Insert a current datetime for each note input in the project
 
     [] FEATURE: Add a way to read text file using Tkinter
 
