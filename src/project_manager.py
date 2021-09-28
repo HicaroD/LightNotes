@@ -1,13 +1,26 @@
+import tkinter
+from tkinter import ttk
 from tkinter import messagebox, simpledialog, filedialog
 from datetime import datetime
-from tkinter import ttk
-import tkinter
+import webbrowser
 import os
 
 CURRENT_SCRIPT_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_SCRIPT_FILE_ABSOLUTE_PATH, "project_notes/")
+PROJECT_GITHUB_LINK = "https://github.com/HicaroD/LightNotes"
 
 class ProjectManager:
+    def __init__(self):
+        self.create_project_notes_folder()
+
+    def check_if_project_notes_folder_exists(self):
+        return os.path.isdir(PROJECT_NOTES_FOLDER_PATH)
+
+    def create_project_notes_folder(self):
+        """Creates a project_notes folder in case of someone delete it"""
+        if not self.check_if_project_notes_folder_exists():
+            os.mkdir(PROJECT_NOTES_FOLDER_PATH)
+
     def create_file(self, project_name, path_for_project_notes):
         """Creates txt file to store the notes"""
         with open(path_for_project_notes, 'x') as f:
@@ -21,13 +34,12 @@ class ProjectManager:
             if project_name is not None:
                 file_name_for_project = f"{project_name}.txt".replace(" ", "_")
                 path_for_project_notes = os.path.join(PROJECT_NOTES_FOLDER_PATH, file_name_for_project)
-
                 self.create_file(project_name, path_for_project_notes)
 
         except FileExistsError:
             wants_to_overwrite_project = Widget.wants_to_overwrite_project()
 
-            if(wants_to_overwrite_project):
+            if wants_to_overwrite_project:
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
@@ -44,6 +56,10 @@ class ProjectManager:
                     date_time = current_time.strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
                     project_note.write(date_time)
                     project_note.write(input_note + "\n\n")
+
+    def info(self):
+        """A method for opening a web browser and redirect the user to the LightNotes repository"""
+        webbrowser.open(PROJECT_GITHUB_LINK)
 
 
 class Widget:
