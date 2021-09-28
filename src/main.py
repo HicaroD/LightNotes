@@ -1,20 +1,25 @@
 import tkinter
+from ttkbootstrap import Style
 from project_manager import ProjectManager, Widget
 
 """
 TODO:
+    [X] FEATURE: Add a better way to handle / manage the button creation (or leave it like that)
+
     [X] FEATURE: Add a way to make the user insert a name for the project and
                  create a new one (without passing a parameter for the name)
 
     [X] FEATURE: Add a button for inserting a input
 
-    [] FIXING: Increase the size of "ask_for_project_name" widget
-
     [X] FEATURE: Insert a current datetime for each note input in the project
 
     [] FEATURE: Add a way to read text file using Tkinter
 
-    [X] FEATURE: Add a better way to handle / manage the button creation (or leave it like that)
+    [] FEATURE: Create a new button "See notes" in the top right corner
+                to select a project and see all your notes
+
+    [] FEATURE: Add a "info" button in the bottom right corner to open the default
+                browser of the user in the repository of LightNotes
 """
 
 
@@ -31,7 +36,6 @@ class ButtonManager():
         add_proj_bttn.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
 
     def add_input_button(self):
-        # TODO: Create add_input method and insert in the button bellow
         add_input_btton = self.create_button("Add a new input", self.project_manager.add_input_note)
         add_input_btton.pack(side=tkinter.constants.LEFT, anchor=tkinter.constants.NW)
 
@@ -39,7 +43,8 @@ class ButtonManager():
 class Application(tkinter.Frame):
     def __init__(self, master):
         super().__init__(master)
-        self.master = master
+        self.style = Style(theme="journal")
+        self.master = self.style.master
         self.buttons = ButtonManager(self.master)
         self.widget = Widget()
         self.configure_gui()
