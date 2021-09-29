@@ -5,11 +5,15 @@ from datetime import datetime
 import webbrowser
 import os
 
-CURRENT_SCRIPT_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
-PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_SCRIPT_FILE_ABSOLUTE_PATH, "project_notes/")
+CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
 PROJECT_GITHUB_LINK = "https://github.com/HicaroD/LightNotes"
 
-class ProjectManager:
+class ProjectChecker:
+    """Class for checking and solving commons erros.
+        - Project notes default folder might not exists and the program will try to access it.
+        - User is trying to access a project that doesn't even exists
+    """
     def __init__(self):
         self.create_project_notes_folder()
 
@@ -20,6 +24,14 @@ class ProjectManager:
         """Creates a project_notes folder in case of someone delete it"""
         if not self.check_if_project_notes_folder_exists():
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
+
+    def check_if_project_exists(project) -> bool:
+        return True if project is not None or project != () else False;
+
+
+class ProjectManager:
+    def __init__(self):
+        self.project_checker = ProjectChecker()
 
     def create_file(self, project_name, path_for_project_notes):
         """Creates txt file to store the notes"""
@@ -43,17 +55,28 @@ class ProjectManager:
 
     def add_input_note(self):
         """Add a single note to an existing project"""
-        current_time = datetime.now()
         project_note_full_path = Widget.get_project_note_full_path()
 
-        if project_note_full_path is not None or project_note_full_path != ():
+        if self.project_checker.check_if_project_exists():
             input_note = Widget.get_input_note()
 
             if(input_note is not None):
+                current_time = datetime.now()
+                date_time = current_time.strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
+
                 with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
-                    date_time = current_time.strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
                     project_note.write(date_time)
                     project_note.write(input_note + "\n\n")
+
+    def see_notes(self, master : tkinter.Tk):
+        project_notes = Widget.get_project_note_full_path()
+
+        if self.project_checker.check_if_project_exists:
+            with open(project_notes, 'r') as notes:
+                text = tkinter.Text(master)
+                text.insert(1.0, chars = notes.read())
+                text.configure(state = "disabled")
+                text.pack(anchor = tkinter.constants.CENTER)
 
     def info(self):
         """A method for opening a web browser and redirect the user to the LightNotes repository"""
@@ -67,7 +90,8 @@ class Widget:
 
     @staticmethod
     def get_project_note_full_path():
-        return tkinter.filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+        return tkinter.filedialog.askopenfilename(initialdir = PROJECT_NOTES_FOLDER_PATH,
+                                                  filetypes=[("Text files", "*.txt")])
 
     @staticmethod
     def get_input_note():
