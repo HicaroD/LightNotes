@@ -37,9 +37,7 @@ class ProjectManager:
                 self.create_file(project_name, path_for_project_notes)
 
         except FileExistsError:
-            wants_to_overwrite_project = Widget.wants_to_overwrite_project()
-
-            if wants_to_overwrite_project:
+            if Widget.wants_to_overwrite_project():
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
@@ -76,5 +74,5 @@ class Widget:
         return tkinter.simpledialog.askstring("Input", "Add note to project in the dialog below:")
 
     @staticmethod
-    def wants_to_overwrite_project():
-        wants_to_overwrite = messagebox.askyesno("WARNING", "Project already exists! \nDo you want overwrite it?")
+    def wants_to_overwrite_project() -> bool:
+        return messagebox.askyesno("WARNING", "Project already exists! \nDo you want overwrite it?")
