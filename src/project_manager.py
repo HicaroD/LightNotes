@@ -6,8 +6,13 @@ import webbrowser
 import os
 
 CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
-PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
+PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH,
+                                         "project_notes/")
 PROJECT_GITHUB_LINK = "https://github.com/HicaroD/LightNotes"
+
+def info():
+    """A method for opening a web browser and redirect the user to the LightNotes repository"""
+    webbrowser.open(PROJECT_GITHUB_LINK)
 
 class ProjectChecker:
     """Class for checking and solving commons erros.
@@ -26,7 +31,7 @@ class ProjectChecker:
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
 
     def check_if_project_exists(project) -> bool:
-        return True if project is not None or project != () else False;
+        return project is not None or project != ()
 
 
 class ProjectManager:
@@ -77,10 +82,6 @@ class ProjectManager:
                 text.insert(1.0, chars = notes.read())
                 text.configure(state = "disabled")
                 text.pack(anchor = tkinter.constants.CENTER)
-
-    def info(self):
-        """A method for opening a web browser and redirect the user to the LightNotes repository"""
-        webbrowser.open(PROJECT_GITHUB_LINK)
 
 
 class Widget:
