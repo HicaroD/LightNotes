@@ -1,14 +1,14 @@
 import tkinter
+import webbrowser
 from tkinter import ttk
 from tkinter import messagebox, simpledialog, filedialog
 from datetime import datetime
-import webbrowser
 import os
 
 CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
-PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH,
-                                         "project_notes/")
+PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
 PROJECT_GITHUB_LINK = "https://github.com/HicaroD/LightNotes"
+LABEL_NOTES_SCREEN_POSITION = (70, 100)
 
 def info():
     """A method for opening a web browser and redirect the user to the LightNotes repository"""
@@ -16,8 +16,7 @@ def info():
 
 class ProjectChecker:
     """Class for checking and solving commons erros.
-        - Project notes default folder might not exists and the program will try to access it.
-        - User is trying to access a project that doesn't even exists
+        - Project notes default folder might not exists and the program will try to access it (and will crash).
     """
     def __init__(self):
         self.create_project_notes_folder()
@@ -28,10 +27,8 @@ class ProjectChecker:
     def create_project_notes_folder(self):
         """Creates a project_notes folder in case of someone delete it"""
         if not self.check_if_project_notes_folder_exists():
+            print("Creating project_notes folder")
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
-
-    def check_if_project_exists(project) -> bool:
-        return project is not None or project != ()
 
 
 class ProjectManager:
@@ -50,7 +47,8 @@ class ProjectManager:
 
             if project_name is not None:
                 file_name_for_project = f"{project_name}.txt".replace(" ", "_")
-                path_for_project_notes = os.path.join(PROJECT_NOTES_FOLDER_PATH, file_name_for_project)
+                path_for_project_notes = os.path.join(PROJECT_NOTES_FOLDER_PATH,
+                                                      file_name_for_project)
                 self.create_file(project_name, path_for_project_notes)
 
         except FileExistsError:
@@ -58,30 +56,31 @@ class ProjectManager:
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
-    def add_input_note(self):
+    def add_input_note(self, master : tkinter.Tk):
         """Add a single note to an existing project"""
         project_note_full_path = Widget.get_project_note_full_path()
 
-        if self.project_checker.check_if_project_exists():
+        if project_note_full_path != "":
             input_note = Widget.get_input_note()
 
-            if(input_note is not None):
-                current_time = datetime.now()
-                date_time = current_time.strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
-
+            if input_note is not None:
+                date_time = datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
                 with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
+                    text = tkinter.Text(master)
                     project_note.write(date_time)
                     project_note.write(input_note + "\n\n")
 
-    def see_notes(self, master : tkinter.Tk):
-        project_notes = Widget.get_project_note_full_path()
+                    self.insert_input_into_text_widget(text, project_note_full_path)
+                    self.place_text_widget(text)
 
-        if self.project_checker.check_if_project_exists:
-            with open(project_notes, 'r') as notes:
-                text = tkinter.Text(master)
-                text.insert(1.0, chars = notes.read())
-                text.configure(state = "disabled")
-                text.pack(anchor = tkinter.constants.CENTER)
+    def place_text_widget(self, text : tkinter.Text):
+        text.place(x = LABEL_NOTES_SCREEN_POSITION[0],
+                   y = LABEL_NOTES_SCREEN_POSITION[1])
+
+    def insert_input_into_text_widget(self, text : tkinter.Text, project_note_path : str):
+        with open(project_note_path) as project_note:
+            text.insert(1.0, project_note.read())
+            text.configure(state = "disabled") # READ-ONLY TEXT
 
 
 class Widget:
