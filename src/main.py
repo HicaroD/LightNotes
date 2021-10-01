@@ -47,7 +47,8 @@ class ButtonManager():
         see_notes_bttn.pack(side = tkinter.constants.LEFT, anchor = tkinter.constants.NW)
 
     def add_info_button(self):
-        add_info_bttn = self.create_button("Info", style = "info.TButton", command = self.project_manager.info)
+        from project_manager import info
+        add_info_bttn = self.create_button("Info", style = "info.TButton", command = info)
         add_info_bttn.pack(side = tkinter.constants.RIGHT, anchor = tkinter.constants.SE)
 
 
