@@ -8,7 +8,7 @@ A note-taking system for project management based on little insights written in 
 - Python 3.8 or more recent versions
 - ttk-bootstrap - Collection of modern, flat themes inspired by Bootstrap for tkinter/ttk. (Read "Installation" section)
 
-## Instalation 
+## Installation 
 1. Clone the repository
 
 ```bash
