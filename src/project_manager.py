@@ -28,10 +28,13 @@ class ProjectErrorChecker:
             print("Creating project_notes folder")
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
 
+    def check_if_project_notes_folder_is_empty(self):
+        return not os.listdir(PROJECT_NOTES_FOLDER_PATH)
+
 
 class ProjectManager:
     def __init__(self, master = tkinter.Tk):
-        ProjectErrorChecker()
+        self.project_error_checker = ProjectErrorChecker()
         self.master = master
         self.text_widget = tkinter.Text(self.master)
 
@@ -56,22 +59,29 @@ class ProjectManager:
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
+    def create_timestamp_for_input_note(self):
+        return datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
+
     def add_input_note(self):
         """Add a single note to an existing project"""
+        if self.project_error_checker.check_if_project_notes_folder_is_empty():
+            messagebox.showwarning("Warning", "You should create a project first")
+            return
+
         project_note_full_path = Widget.get_project_note_full_path()
 
-        if project_note_full_path != "":
+        if project_note_full_path != "" or project_note_full_path != ():
             input_note = Widget.get_input_note()
 
             if input_note is not None:
-                date_time = datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
+                date_time = self.create_timestamp_for_input_note()
+
                 with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
                     project_note.write(date_time)
                     project_note.write(input_note + "\n\n")
 
-                    self.insert_text_into_text_widget(project_note_full_path)
-                    self.place_text_widget()
-                    self.see_notes(project_note_full_path)
+                self.insert_text_into_text_widget(project_note_full_path)
+                self.place_text_widget()
 
     def place_text_widget(self):
         self.text_widget.place(x = LABEL_NOTES_SCREEN_POSITION[0],
@@ -95,6 +105,7 @@ class ProjectManager:
         except (TypeError, FileNotFoundError) as e:
             messagebox.showwarning("Invalid input", "Select a valid file")
             return None
+
 
 
 class Widget:
