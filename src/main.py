@@ -31,12 +31,12 @@ class ButtonManager():
 
     def add_project_button(self):
         add_proj_bttn = self.create_button("Add project", self.project_manager.create_project)
-        add_proj_bttn.pack(side = TOP_LEFT_CORNER_POSITIONS["side"], 
+        add_proj_bttn.pack(side = TOP_LEFT_CORNER_POSITIONS["side"],
                            anchor = TOP_LEFT_CORNER_POSITIONS["anchor"])
 
     def add_input_button(self):
         add_input_btton = self.create_button("Add a new input", self.project_manager.add_input_note)
-        add_input_btton.pack(side = TOP_LEFT_CORNER_POSITIONS["side"], 
+        add_input_btton.pack(side = TOP_LEFT_CORNER_POSITIONS["side"],
                              anchor = TOP_LEFT_CORNER_POSITIONS["anchor"])
 
     def add_info_button(self):
@@ -46,7 +46,7 @@ class ButtonManager():
 
     def see_note_button(self):
         see_note_bttn = self.create_button("See notes", self.project_manager.see_notes)
-        see_note_bttn.pack(side = TOP_LEFT_CORNER_POSITIONS["side"], 
+        see_note_bttn.pack(side = TOP_LEFT_CORNER_POSITIONS["side"],
                            anchor = TOP_LEFT_CORNER_POSITIONS["anchor"])
 
 
