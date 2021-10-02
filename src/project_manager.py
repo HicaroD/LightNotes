@@ -8,16 +8,14 @@ import os
 CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
 PROJECT_GITHUB_LINK = "https://github.com/HicaroD/LightNotes"
-LABEL_NOTES_SCREEN_POSITION = (70, 100)
+LABEL_NOTES_SCREEN_POSITION = (70, 70)
 
 def info():
     """A method for opening a web browser and redirect the user to the LightNotes repository"""
     webbrowser.open(PROJECT_GITHUB_LINK)
 
-class ProjectChecker:
-    """Class for checking and solving commons erros.
-        - Project notes default folder might not exists and the program will try to access it (and will crash).
-    """
+class ProjectErrorChecker:
+    """ Solve common errors, for example, the program'd crash if project_notes folder doesn't exist """
     def __init__(self):
         self.create_project_notes_folder()
 
@@ -32,8 +30,10 @@ class ProjectChecker:
 
 
 class ProjectManager:
-    def __init__(self):
-        self.project_checker = ProjectChecker()
+    def __init__(self, master = tkinter.Tk):
+        ProjectErrorChecker()
+        self.master = master
+        self.text_widget = tkinter.Text(self.master)
 
     def create_file(self, project_name, path_for_project_notes):
         """Creates txt file to store the notes"""
@@ -56,7 +56,7 @@ class ProjectManager:
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
-    def add_input_note(self, master : tkinter.Tk):
+    def add_input_note(self):
         """Add a single note to an existing project"""
         project_note_full_path = Widget.get_project_note_full_path()
 
@@ -66,21 +66,35 @@ class ProjectManager:
             if input_note is not None:
                 date_time = datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
                 with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
-                    text = tkinter.Text(master)
                     project_note.write(date_time)
                     project_note.write(input_note + "\n\n")
 
-                    self.insert_input_into_text_widget(text, project_note_full_path)
-                    self.place_text_widget(text)
+                    self.insert_text_into_text_widget(project_note_full_path)
+                    self.place_text_widget()
+                    self.see_notes(project_note_full_path)
 
-    def place_text_widget(self, text : tkinter.Text):
-        text.place(x = LABEL_NOTES_SCREEN_POSITION[0],
-                   y = LABEL_NOTES_SCREEN_POSITION[1])
+    def place_text_widget(self):
+        self.text_widget.place(x = LABEL_NOTES_SCREEN_POSITION[0],
+                               y = LABEL_NOTES_SCREEN_POSITION[1])
 
-    def insert_input_into_text_widget(self, text : tkinter.Text, project_note_path : str):
+    def insert_text_into_text_widget(self, project_note_path : str):
         with open(project_note_path) as project_note:
-            text.insert(1.0, project_note.read())
-            text.configure(state = "disabled") # READ-ONLY TEXT
+            self.text_widget.insert(1.0, project_note.read())
+            self.text_widget.configure(state = "disabled") # READ-ONLY TEXT
+
+    def see_notes(self, project_note_path : str = None):
+        try:
+            if project_note_path is not None:
+                self.insert_text_into_text_widget(project_note_path)
+            else:
+                project_notes = Widget.get_project_note_full_path()
+                self.insert_text_into_text_widget(project_notes)
+
+            self.place_text_widget()
+
+        except (TypeError, FileNotFoundError) as e:
+            messagebox.showwarning("Invalid input", "Select a valid file")
+            return None
 
 
 class Widget:
