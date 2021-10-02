@@ -2,6 +2,7 @@
 **WARNING**: This project is a work in progress
 
 A note-taking system for project management based on little insights written in Python. 
+![](./img/Captura de tela_2021-10-02_17-11-08.png)
 
 ## Instalation 
 1. Clone the repository
