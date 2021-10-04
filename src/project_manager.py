@@ -62,6 +62,7 @@ class ProjectManager:
     def create_timestamp_for_input_note(self):
         return datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
 
+    # TODO: Refactor add_input_note method -> too big
     def add_input_note(self):
         """Add a single note to an existing project"""
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
@@ -70,7 +71,7 @@ class ProjectManager:
 
         project_note_full_path = Widget.get_project_note_full_path()
 
-        if project_note_full_path != "" or project_note_full_path != ():
+        if isinstance(project_note_full_path, str):
             input_note = Widget.get_input_note()
 
             if input_note is not None:
