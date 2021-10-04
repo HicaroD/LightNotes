@@ -4,13 +4,8 @@ from project_manager import ProjectManager, Widget
 
 """
 TODO:
-    [X] FEATURE: Add a way to read text file using Tkinter
-
-    [X] FEATURE: Add a "info" button in the bottom right corner to open the default
-                browser of the user in the repository of LightNotes
-
     [] BUG: When I insert a new entry in any project note, the changes don't show up immediately, I need to
-            to insert another to make previous changes appear
+            to insert another one or re-open the app to make previous changes appear
 """
 
 TOP_LEFT_CORNER_POSITIONS = {"side" : tkinter.constants.LEFT, "anchor" : tkinter.constants.NW}
