@@ -1,9 +1,9 @@
+import os
 import tkinter
 import webbrowser
+from datetime import datetime
 from tkinter import ttk
 from tkinter import messagebox, simpledialog, filedialog
-from datetime import datetime
-import os
 
 CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
@@ -23,7 +23,6 @@ class ProjectErrorChecker:
         return os.path.isdir(PROJECT_NOTES_FOLDER_PATH)
 
     def create_project_notes_folder(self):
-        """Creates a project_notes folder in case of someone delete it"""
         if not self.check_if_project_notes_folder_exists():
             print("Creating project_notes folder")
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
@@ -39,12 +38,10 @@ class ProjectManager:
         self.text_widget = tkinter.Text(self.master)
 
     def create_file(self, project_name, path_for_project_notes):
-        """Creates txt file to store the notes"""
         with open(path_for_project_notes, 'x') as f:
             f.write(project_name.title() + "\n\n")
 
     def create_project(self):
-        """Creates a project in the project_notes folder"""
         try:
             project_name = Widget.ask_for_project_name()
 
@@ -62,9 +59,7 @@ class ProjectManager:
     def create_timestamp_for_input_note(self):
         return datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
 
-    # TODO: Refactor add_input_note method -> too big
-    def add_input_note(self):
-        """Add a single note to an existing project"""
+    def add_input_note_to_text_widget(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
             messagebox.showwarning("Warning", "You should create a project first")
             return
@@ -75,14 +70,16 @@ class ProjectManager:
             input_note = Widget.get_input_note()
 
             if input_note is not None:
-                date_time = self.create_timestamp_for_input_note()
-
-                with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
-                    project_note.write(date_time)
-                    project_note.write(input_note + "\n\n")
-
+                self.write_input_notes_to_file(input_note, project_note_full_path)
                 self.insert_text_into_text_widget(project_note_full_path)
                 self.place_text_widget()
+
+    def write_input_notes_to_file(self, input_note : str, project_note_full_path : str):
+        input_timestamp = self.create_timestamp_for_input_note()
+
+        with open(project_note_full_path, 'a', encoding="utf-8") as project_note:
+            project_note.write(input_timestamp)
+            project_note.write(input_note + "\n\n")
 
     def place_text_widget(self):
         self.text_widget.place(x = LABEL_NOTES_SCREEN_POSITION[0],
@@ -90,24 +87,20 @@ class ProjectManager:
 
     def insert_text_into_text_widget(self, project_note_path : str):
         with open(project_note_path) as project_note:
+            self.text_widget.configure(state = "normal")
+            self.text_widget.delete(1.0, tkinter.END)
             self.text_widget.insert(1.0, project_note.read())
-            self.text_widget.configure(state = "disabled") # READ-ONLY TEXT
+            self.text_widget.configure(state = "disabled")
 
-    def see_notes(self, project_note_path : str = None):
+    def see_notes(self):
         try:
-            if project_note_path is not None:
-                self.insert_text_into_text_widget(project_note_path)
-            else:
-                project_notes = Widget.get_project_note_full_path()
-                self.insert_text_into_text_widget(project_notes)
-
+            project_note_path = Widget.get_project_note_full_path()
+            self.insert_text_into_text_widget(project_note_path)
             self.place_text_widget()
 
         except (TypeError, FileNotFoundError) as e:
             messagebox.showwarning("Invalid input", "Select a valid file")
-            return None
-
-
+            return
 
 class Widget:
     @staticmethod
