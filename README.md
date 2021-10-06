@@ -28,6 +28,7 @@ cd src/ && python3.8 main.py
 ```
 
 ## Usage
+You can create a new project note and add little notes as you build your project. After create your project, press "See notes". All changes will automatically be shown on the screen.
 
 ## License 
 [MIT](./LICENSE)
