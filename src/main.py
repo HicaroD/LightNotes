@@ -4,8 +4,9 @@ from project_manager import ProjectManager, Widget
 
 """
 TODO:
-    [] BUG: When I insert a new entry in any project note, the changes don't show up immediately, I need to
+    [X] BUG: When I insert a new entry in any project note, the changes don't show up immediately, I need to
             to insert another one or re-open the app to make previous changes appear
+    [] FEATURE: Add some kind of remove note functionality
 """
 
 class ButtonManager():
@@ -17,6 +18,7 @@ class ButtonManager():
         self.add_project_button()
         self.add_input_button()
         self.add_info_button()
+        self.remove_notes_button()
         self.see_note_button()
 
     def create_button(self, text : str, command, style = "primary.TButton"):
@@ -43,6 +45,10 @@ class ButtonManager():
         see_note_bttn.pack(side = tkinter.constants.LEFT,
                            anchor = tkinter.constants.NW)
 
+    def remove_notes_button(self):
+        remove_notes_bttn = self.create_button("Remove note", self.project_manager.remove_note)
+        remove_notes_bttn.pack(side = tkinter.constants.LEFT,
+                               anchor = tkinter.constants.NW)
 
 WINDOW_THEME = "journal"
 
