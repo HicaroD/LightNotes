@@ -59,6 +59,15 @@ class ProjectManager:
     def create_timestamp_for_input_note(self):
         return datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
 
+    def remove_note(self):
+        if self.project_error_checker.check_if_project_notes_folder_is_empty():
+            messagebox.showwarning("No projects", "There is no project to delete")
+            return
+
+        project_notes_path_to_remove = Widget.get_project_note_full_path()
+        if project_notes_path_to_remove != "":
+            os.remove(project_notes_path_to_remove)
+
     def add_input_note_to_text_widget(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
             messagebox.showwarning("Warning", "You should create a project first")
