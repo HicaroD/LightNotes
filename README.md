@@ -2,7 +2,7 @@
 **WARNING**: This project is a work in progress
 
 A note-taking system for project management based on little insights written in Python. 
-<img src="./img/Captura de tela_2021-10-02_17-11-08.png">
+<img src="./img/Captura de tela_2021-10-06_19-16-22.png">
 
 ## Requirements 
 - Python 3.8 or more recent versions
