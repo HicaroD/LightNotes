@@ -117,4 +117,4 @@ class ProjectManager:
             self.place_text_widget()
 
         except (TypeError, FileNotFoundError) as e:
-            messagebox.showwarning("Invalid input", "Select a valid file")
+            self.widget.show_warning_for_invalid_input()
