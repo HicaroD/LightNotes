@@ -61,14 +61,19 @@ class ProjectManager:
     def remove_note(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
             messagebox.showwarning("No projects", "There is no project to delete")
+            return
 
         project_notes_path_to_remove = Widget.get_project_note_full_path()
         if project_notes_path_to_remove != "":
             os.remove(project_notes_path_to_remove)
+            self.text_widget_for_notes.configure(state = "normal")
+            self.text_widget_for_notes.delete(1.0, tkinter.END)
+            self.text_widget_for_notes.configure(state = "disabled")
 
     def add_input_note_to_text_widget(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
             messagebox.showwarning("Warning", "You should create a project first")
+            return
 
         project_note_full_path = Widget.get_project_note_full_path()
 
