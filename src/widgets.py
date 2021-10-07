@@ -16,3 +16,6 @@ class Widget:
 
     def show_warning_for_empty_project_notes(self):
         messagebox.showwarning("Folder is empty", "You should create a project first")
+
+    def show_warning_for_invalid_input(self):
+        messagebox.showwarning("Invalid input", "Select a valid file")
