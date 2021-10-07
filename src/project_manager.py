@@ -33,6 +33,7 @@ class ProjectErrorChecker:
 class ProjectManager:
     def __init__(self, master = tkinter.Tk):
         self.master = master
+        self.widget = Widget()
         self.project_error_checker = ProjectErrorChecker()
         self.text_widget_for_notes = tkinter.Text(self.master)
 
@@ -42,7 +43,7 @@ class ProjectManager:
 
     def create_project(self):
         try:
-            project_name = Widget.ask_for_project_name()
+            project_name = self.widget.ask_for_project_name()
 
             if project_name is not None:
                 file_name_for_project = f"{project_name}.txt".replace(" ", "_")
@@ -51,7 +52,7 @@ class ProjectManager:
                 self.create_file(project_name, path_for_project_notes)
 
         except FileExistsError:
-            if Widget.wants_to_overwrite_project():
+            if self.widget.wants_to_overwrite_project():
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
@@ -60,10 +61,11 @@ class ProjectManager:
 
     def remove_note(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
-            messagebox.showwarning("No projects", "There is no project to delete")
+            self.widget.show_warning_for_empty_project_notes()
             return
 
-        project_notes_path_to_remove = Widget.get_project_note_full_path()
+        project_notes_path_to_remove = self.widget.get_project_note_full_path()
+
         if project_notes_path_to_remove != "":
             os.remove(project_notes_path_to_remove)
             self.text_widget_for_notes.configure(state = "normal")
@@ -72,17 +74,17 @@ class ProjectManager:
 
     def add_input_note_to_text_widget(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
-            messagebox.showwarning("Warning", "You should create a project first")
+            self.widget.show_warning_for_empty_project_notes()
             return
 
-        project_note_full_path = Widget.get_project_note_full_path()
+        project_note_full_path = self.widget.get_project_note_full_path()
 
         if isinstance(project_note_full_path, str):
-            input_note = Widget.get_input_note()
+            input_note = self.widget.get_input_note()
 
             if input_note is not None:
                 self.write_input_notes_to_file(input_note, project_note_full_path)
-                self.insert_text_into_text_widget(project_note_full_path)
+                self.insert_text_from_file_into_text_widget(project_note_full_path)
                 self.place_text_widget()
 
     def write_input_notes_to_file(self, input_note : str, project_note_full_path : str):
@@ -96,7 +98,7 @@ class ProjectManager:
         self.text_widget_for_notes.place(x = LABEL_NOTES_SCREEN_POSITION[0],
                                          y = LABEL_NOTES_SCREEN_POSITION[1])
 
-    def insert_text_into_text_widget(self, project_note_path : str):
+    def insert_text_from_file_into_text_widget(self, project_note_path : str):
         with open(project_note_path) as project_note:
             self.text_widget_for_notes.configure(state = "normal")
             self.text_widget_for_notes.delete(1.0, tkinter.END)
@@ -105,27 +107,31 @@ class ProjectManager:
 
     def see_notes(self):
         try:
-            project_note_path = Widget.get_project_note_full_path()
-            self.insert_text_into_text_widget(project_note_path)
+            if self.project_error_checker.check_if_project_notes_folder_is_empty():
+                self.widget.show_warning_for_empty_project_notes()
+                return
+
+            project_note_path = self.widget.get_project_note_full_path()
+            self.insert_text_from_file_into_text_widget(project_note_path)
             self.place_text_widget()
 
         except (TypeError, FileNotFoundError) as e:
             messagebox.showwarning("Invalid input", "Select a valid file")
 
 class Widget:
-    @staticmethod
-    def ask_for_project_name():
+    def ask_for_project_name(self):
         return tkinter.simpledialog.askstring("Project name", "Insert the name of the project")
 
-    @staticmethod
-    def get_project_note_full_path():
+    def get_project_note_full_path(self):
         return tkinter.filedialog.askopenfilename(initialdir = PROJECT_NOTES_FOLDER_PATH,
                                                   filetypes=[("Text files", "*.txt")])
 
-    @staticmethod
-    def get_input_note():
+    def get_input_note(self):
         return tkinter.simpledialog.askstring("Input", "Add note to project in the dialog below:")
 
-    @staticmethod
-    def wants_to_overwrite_project() -> bool:
+    def wants_to_overwrite_project(self) -> bool:
         return messagebox.askyesno("WARNING", "Project already exists! \nDo you want overwrite it?")
+
+    def show_warning_for_empty_project_notes(self):
+        messagebox.showwarning("Folder is empty", "You should create a project first")
+        return
