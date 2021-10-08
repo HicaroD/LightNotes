@@ -38,8 +38,8 @@ class ProjectManager:
         self.project_error_checker = ProjectErrorChecker()
         self.text_widget_for_notes = tkinter.Text(self.master)
 
-    def create_file(self, project_name, path_for_project_notes):
-        with open(path_for_project_notes, 'x') as f:
+    def create_file(self, project_name, destination_path):
+        with open(destination_path, 'x') as f:
             f.write(project_name.title() + "\n\n")
 
     def create_project(self):
@@ -60,6 +60,11 @@ class ProjectManager:
     def create_timestamp_for_input_note(self):
         return datetime.now().strftime("\U0001F4C5 %m/%d/%Y  \U0001F551 %H:%M:%S\n")
 
+    def clean_text_widget(self):
+        self.text_widget_for_notes.configure(state = "normal")
+        self.text_widget_for_notes.delete(1.0, tkinter.END)
+        self.text_widget_for_notes.configure(state = "disabled")
+
     def remove_note(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
             self.widget.show_warning_for_empty_project_notes()
@@ -69,9 +74,7 @@ class ProjectManager:
 
         if project_notes_path_to_remove != "":
             os.remove(project_notes_path_to_remove)
-            self.text_widget_for_notes.configure(state = "normal")
-            self.text_widget_for_notes.delete(1.0, tkinter.END)
-            self.text_widget_for_notes.configure(state = "disabled")
+            self.clean_text_widget()
 
     def add_input_note_to_text_widget(self):
         if self.project_error_checker.check_if_project_notes_folder_is_empty():
@@ -80,7 +83,7 @@ class ProjectManager:
 
         project_note_full_path = self.widget.get_project_note_full_path()
 
-        if isinstance(project_note_full_path, str):
+        if isinstance(project_note_full_path, str) and project_note_full_path != "":
             input_note = self.widget.get_input_note()
 
             if input_note is not None:
