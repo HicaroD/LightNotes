@@ -4,9 +4,7 @@ from project_manager import ProjectManager, Widget
 
 """
 TODO:
-    [X] BUG: When I insert a new entry in any project note, the changes don't show up immediately, I need to
-            to insert another one or re-open the app to make previous changes appear
-    [] FEATURE: Add some kind of remove note functionality
+
 """
 
 class ButtonManager():
