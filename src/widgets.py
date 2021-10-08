@@ -1,4 +1,8 @@
 from tkinter import simpledialog, filedialog, messagebox
+import os
+
+CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
 
 class Widget:
     def ask_for_project_name(self):
