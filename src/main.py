@@ -53,8 +53,7 @@ WINDOW_THEME = "journal"
 class Application(tkinter.Frame):
     def __init__(self, master):
         super().__init__(master)
-        self.style = Style(theme=WINDOW_THEME)
-        self.master = self.style.master
+        self.master = self.create_styled_window_instance()
         self.buttons = ButtonManager(self.master)
         self.widget = Widget()
         self.configure_gui()
@@ -64,6 +63,11 @@ class Application(tkinter.Frame):
         self.master.geometry("720x480")
         self.master.resizable(False, False)
         self.buttons.draw_buttons()
+
+    def create_styled_window_instance(self):
+        style = Style(theme=WINDOW_THEME)
+        master = style.master
+        return master
 
 
 def main():
