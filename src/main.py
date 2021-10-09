@@ -4,6 +4,7 @@ from project_manager import ProjectManager, Widget
 
 """
 TODO:
+    [] Make input note widget bigger (to support more characters)
 
 """
 
