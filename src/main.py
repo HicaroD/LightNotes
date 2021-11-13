@@ -2,12 +2,6 @@ import tkinter
 from ttkbootstrap import Style
 from project_manager import ProjectManager, Widget
 
-"""
-TODO:
-    [] Make input note widget bigger (to support more characters)
-
-"""
-
 class ButtonManager():
     def __init__(self, window : tkinter.Tk):
         self.window = window
