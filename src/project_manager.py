@@ -17,7 +17,6 @@ def info():
 
 class ProjectErrorChecker:
     def __init__(self):
-        # Create project notes folder when starting the program if it doesn't exist
         self.create_project_notes_folder()
 
     def does_project_notes_folder_exists(self) -> bool:
@@ -25,7 +24,6 @@ class ProjectErrorChecker:
 
     def create_project_notes_folder(self):
         if not self.does_project_notes_folder_exists():
-            print("Creating project_notes folder")
             os.mkdir(PROJECT_NOTES_FOLDER_PATH)
 
     def is_project_notes_folder_empty(self) -> bool:
