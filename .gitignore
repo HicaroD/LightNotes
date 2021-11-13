@@ -2,3 +2,4 @@ src/env
 .vim/
 notes.txt
 src/__pycache__
+src/project_notes/
