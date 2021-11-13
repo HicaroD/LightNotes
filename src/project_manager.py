@@ -1,10 +1,10 @@
 import os
 import tkinter
 import webbrowser
-from datetime import datetime
 from tkinter import ttk
 from tkinter import messagebox
 from widgets import Widget
+from text import Text
 
 CURRENT_MAIN_FILE_ABSOLUTE_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_NOTES_FOLDER_PATH = os.path.join(CURRENT_MAIN_FILE_ABSOLUTE_PATH, "project_notes/")
@@ -35,7 +35,7 @@ class ProjectManager:
         self.master = master
         self.widget = Widget()
         self.project_error_checker = ProjectErrorChecker()
-        self.text_widget_for_notes = tkinter.Text(self.master)
+        self.text_widget_for_notes = Text(self.master)
 
     def create_file(self, project_name, destination_path) -> None:
         with open(destination_path, 'x') as f:
@@ -56,14 +56,6 @@ class ProjectManager:
                 os.remove(path_for_project_notes)
                 self.create_file(project_name, path_for_project_notes)
 
-    def create_timestamp_for_input_note(self):
-        return datetime.now().strftime("%m/%d/%Y   %H:%M:%S\n")
-
-    def clean_text_widget(self) -> None:
-        self.text_widget_for_notes.configure(state = "normal")
-        self.text_widget_for_notes.delete(1.0, tkinter.END)
-        self.text_widget_for_notes.configure(state = "disabled")
-
     def remove_note(self):
         if self.project_error_checker.is_project_notes_folder_empty():
             self.widget.show_warning_for_empty_project_notes()
@@ -73,7 +65,7 @@ class ProjectManager:
 
         if project_notes_path_to_remove != "":
             os.remove(project_notes_path_to_remove)
-            self.clean_text_widget()
+            self.text_widget_for_notes.clear_text()
 
     def is_valid_project_notes_path(self, project_note_full_path) -> bool:
         return isinstance(project_note_full_path, str) and project_note_full_path != "" 
@@ -90,26 +82,15 @@ class ProjectManager:
 
             if input_note is not None:
                 self.write_input_notes_to_file(input_note, project_note_full_path)
-                self.insert_text_from_file_into_text_widget(project_note_full_path)
-                self.place_text_widget()
+                self.text_widget_for_notes.insert_text_from_file_into_text_widget(project_note_full_path)
+                self.text_widget_for_notes.place_text_widget()
 
     def write_input_notes_to_file(self, input_note : str, project_note_full_path : str):
-        timestamp_for_input_note = self.create_timestamp_for_input_note()
+        timestamp_for_input_note = self.text_widget_for_notes.create_timestamp_for_input_note()
 
         with open(project_note_full_path, 'a', encoding="utf-8") as project_note_file:
             project_note_file.write(timestamp_for_input_note)
             project_note_file.write(input_note + "\n\n")
-
-    def place_text_widget(self):
-        self.text_widget_for_notes.place(x = LABEL_NOTES_SCREEN_POSITION[0],
-                                         y = LABEL_NOTES_SCREEN_POSITION[1])
-
-    def insert_text_from_file_into_text_widget(self, project_note_path : str):
-        with open(project_note_path) as project_note:
-            self.text_widget_for_notes.configure(state = "normal")
-            self.text_widget_for_notes.delete(1.0, tkinter.END)
-            self.text_widget_for_notes.insert(1.0, project_note.read())
-            self.text_widget_for_notes.configure(state = "disabled")
 
     def see_notes(self):
         try:
@@ -118,8 +99,8 @@ class ProjectManager:
                 return
 
             project_note_path = self.widget.get_project_note_full_path()
-            self.insert_text_from_file_into_text_widget(project_note_path)
-            self.place_text_widget()
+            self.text_widget_for_notes.insert_text_from_file_into_text_widget(project_note_path)
+            self.text_widget_for_notes.place_text_widget()
 
         except (TypeError, FileNotFoundError) as e:
             self.widget.show_warning_for_invalid_input()
